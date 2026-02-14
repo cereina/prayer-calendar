@@ -10,6 +10,10 @@
     <script src="https://praytimes.org/code/v2/js/PrayTimes.js"></script>
 
     <style>
+        .hidden {
+            display: none;
+        }
+
         :root {
             --bg: #0b0f14;
             --card: #121826;
@@ -353,7 +357,7 @@
                         <div class="tiny">Pick a city OR use GPS OR enter lat/lng.</div>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <label>Time Format</label>
                         <select id="timeFormat" aria-label="Time format">
                             <option value="24h">24h</option>
@@ -361,7 +365,7 @@
                         </select>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <label>Imsak (Suhoor stop) offset minutes before Fajr</label>
                         <input id="imsakOffset" type="number" min="0" max="90" step="1"
                             aria-label="Imsak offset minutes" />
@@ -387,7 +391,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div class="hidden">
                         <label>Timezone (hours from UTC)</label>
                         <input id="tz" type="number" step="0.5" aria-label="Timezone offset" />
                         <div class="tiny">Auto-filled from your device (handles DST).</div>
@@ -535,45 +539,45 @@
         // Hijri helpers (using Intl islamic calendar)
         // -----------------------
         const HIJRI_MONTHS_EN = [
-  "Muharram",
-  "Safar",
-  "Rabiʿ al-Awwal",
-  "Rabiʿ al-Thani",
-  "Jumada al-Awwal",
-  "Jumada al-Thani",
-  "Rajab",
-  "Shaʿban",
-  "Ramadan",
-  "Shawwal",
-  "Dhu al-Qaʿdah",
-  "Dhu al-Hijjah"
-];
+            "Muharram",
+            "Safar",
+            "Rabiʿ al-Awwal",
+            "Rabiʿ al-Thani",
+            "Jumada al-Awwal",
+            "Jumada al-Thani",
+            "Rajab",
+            "Shaʿban",
+            "Ramadan",
+            "Shawwal",
+            "Dhu al-Qaʿdah",
+            "Dhu al-Hijjah"
+        ];
 
-function hijriParts(date) {
-  try {
-    const fmt = new Intl.DateTimeFormat("en-u-ca-islamic", {
-      year: "numeric", month: "numeric", day: "numeric"
-    });
-    const parts = fmt.formatToParts(date);
-    const get = (type) => parts.find(p => p.type === type)?.value;
+        function hijriParts(date) {
+            try {
+                const fmt = new Intl.DateTimeFormat("en-u-ca-islamic", {
+                    year: "numeric", month: "numeric", day: "numeric"
+                });
+                const parts = fmt.formatToParts(date);
+                const get = (type) => parts.find(p => p.type === type)?.value;
 
-    const y = Number(get("year"));
-    const m = Number(get("month"));
-    const d = Number(get("day"));
+                const y = Number(get("year"));
+                const m = Number(get("month"));
+                const d = Number(get("day"));
 
-    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
-    return { y, m, d };
-  } catch {
-    return null;
-  }
-}
+                if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
+                return { y, m, d };
+            } catch {
+                return null;
+            }
+        }
 
-function hijriLong(date) {
-  const hp = hijriParts(date);
-  if (!hp) return "";
-  const monthName = HIJRI_MONTHS_EN[hp.m - 1] || `Month ${hp.m}`;
-  return `${monthName} ${hp.d}, ${hp.y} AH`;
-}
+        function hijriLong(date) {
+            const hp = hijriParts(date);
+            if (!hp) return "";
+            const monthName = HIJRI_MONTHS_EN[hp.m - 1] || `Month ${hp.m}`;
+            return `${monthName} ${hp.d}, ${hp.y} AH`;
+        }
 
 
         function isRamadan(date) {
@@ -972,4 +976,3 @@ function hijriLong(date) {
 </body>
 
 </html>
-
