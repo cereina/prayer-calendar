@@ -331,7 +331,7 @@
 
                 <div style="margin-top:10px;">
                     <div class="count" id="countdown">—</div>
-                    <div class="tiny" id="countdownNote"></div>
+                    <!--div class="tiny" id="countdownNote"></div-->
                 </div>
             </div>
 
@@ -654,7 +654,7 @@ function hijriLong(date) {
             ];
 
             const dateStr = today.toLocaleDateString(undefined, { weekday: "long", year: "numeric", month: "long", day: "numeric" });
-            document.getElementById("meta").textContent = `${dateStr} • Method: Jafari • Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)} • TZ ${tz}`;
+            document.getElementById("meta").textContent = `${dateStr}`;
 
             const hijri = hijriLong(today);
             document.getElementById("hijriNote").textContent = hijri ? `Hijri: ${hijri}` : "";
@@ -713,7 +713,7 @@ function hijriLong(date) {
             countdownTimer = null;
             document.getElementById("nextPill").textContent = "Next: —";
             document.getElementById("countdown").textContent = "—";
-            document.getElementById("countdownNote").textContent = "";
+            //document.getElementById("countdownNote").textContent = "";
         }
 
         function startCountdown() {
@@ -722,7 +722,7 @@ function hijriLong(date) {
             function tick() {
                 const nextPill = document.getElementById("nextPill");
                 const countdown = document.getElementById("countdown");
-                const note = document.getElementById("countdownNote");
+                //const note = document.getElementById("countdownNote");
 
                 if (!lastComputed) return;
 
@@ -749,7 +749,7 @@ function hijriLong(date) {
 
                 nextPill.textContent = `Next: ${lastComputed.next.label} • ${lastComputed.next.value}`;
                 countdown.textContent = `${pad2(hh)}:${pad2(mm)}:${pad2(ss)}`;
-                note.textContent = `Method: Jafari • Imsak offset: ${lastComputed.imsakOffset} min`;
+                //note.textContent = `Method: Jafari • Imsak offset: ${lastComputed.imsakOffset} min`;
             }
 
             tick();
