@@ -1,0 +1,77 @@
+<!doctype html>
+<html>
+
+<head>
+    <meta charset="utf-8" />
+    <title>Shia Prayer Times (Jafari)</title>
+    <script src="https://praytimes.org/code/v2/js/PrayTimes.js"></script>
+    <style>
+        body {
+            font-family: system-ui;
+            max-width: 520px;
+            margin: 24px auto;
+        }
+
+        .row {
+            display: flex;
+            justify-content: space-between;
+            padding: 10px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .big {
+            font-size: 22px;
+            font-weight: 700;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="big" id="title">Today</div>
+    <div id="meta"></div>
+    <div id="list"></div>
+
+    <script>
+        // 1) Pick Jafari (Ithna Ashari)
+        const pt = new PrayTimes("Jafari"); // supported method list includes Jafari :contentReference[oaicite:4]{index=4}
+
+        // Optional: tune offsets (minutes) to match your marja/masjid timetable
+        // pt.tune({ fajr: 0, dhuhr: 0, asr: 0, maghrib: 0, isha: 0 });
+
+        // 2) Get location (simple demo uses geolocation)
+        navigator.geolocation.getCurrentPosition(
+            (pos) => {
+                const lat = pos.coords.latitude;
+                const lng = pos.coords.longitude;
+
+                const now = new Date();
+                const tz = -now.getTimezoneOffset() / 60; // local timezone hours
+
+                // 3) Compute times (format = 24h)
+                const times = pt.getTimes(now, [lat, lng], tz, 0, "24h");
+
+                document.getElementById("meta").textContent =
+                    `Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)} | TZ ${tz}`;
+
+                const order = ["fajr", "sunrise", "dhuhr", "asr", "maghrib", "isha"];
+                const labels = {
+                    fajr: "Fajr", sunrise: "Sunrise", dhuhr: "Dhuhr",
+                    asr: "Asr", maghrib: "Maghrib", isha: "Isha"
+                };
+
+                document.getElementById("list").innerHTML = order.map(k => `
+            <div class="row">
+              <div>${labels[k]}</div>
+              <div>${times[k]}</div>
+            </div>
+          `).join("");
+            },
+            (err) => {
+                document.getElementById("meta").textContent =
+                    "Location blocked. Add a manual city/lat-lng input.";
+            }
+        );
+    </script>
+</body>
+
+</html>
