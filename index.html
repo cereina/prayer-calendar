@@ -405,7 +405,7 @@
 
         <div class="card" style="margin-top:12px; display:none;" id="ramadanCard" aria-label="Ramadan timetable">
             <div class="big" id="ramadanTitle">Ramadan Calendar</div>
-            <div class="tiny" id="ramadanSubtitle"></div>
+            <!--div class="tiny" id="ramadanSubtitle"></div-->
 
             <div style="margin-top:10px;" class="tablewrap" aria-label="Ramadan timetable table">
                 <table id="ramadanTable">
@@ -860,20 +860,18 @@ function hijriLong(date) {
             ramadanCard.style.display = "block";
 
             const titleEl = document.getElementById("ramadanTitle");
-            const subEl = document.getElementById("ramadanSubtitle");
+            //const subEl = document.getElementById("ramadanSubtitle");
 
             const firstGreg = first.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
             const lastGreg = last.toLocaleDateString(undefined, { year: "numeric", month: "long", day: "numeric" });
             const firstHij = hijriLong(first);
             const lastHij = hijriLong(last);
 
-            titleEl.textContent = "Ramadan Monthly Calendar (Jafari)";
-            subEl.textContent =
-                `${firstHij} → ${lastHij}  •  ${firstGreg} → ${lastGreg}  •  Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)} • TZ ${tz} • Imsak offset ${imsakOffset} min`;
+            titleEl.textContent = "Ramadan Monthly Calendar";
+            //subEl.textContent = `${firstHij} → ${lastHij}  •  ${firstGreg} → ${lastGreg}  •  Lat ${lat.toFixed(4)}, Lng ${lng.toFixed(4)} • TZ ${tz} • Imsak offset ${imsakOffset} min`;
 
             // Screen reader caption + hint
-            document.getElementById("ramadanCaption").textContent =
-                `Ramadan timetable for latitude ${lat.toFixed(4)} and longitude ${lng.toFixed(4)} (Jafari). Imsak offset ${imsakOffset} minutes.`;
+            //document.getElementById("ramadanCaption").textContent =`Ramadan timetable for latitude ${lat.toFixed(4)} and longitude ${lng.toFixed(4)} (Jafari). Imsak offset ${imsakOffset} minutes.`;
 
             document.getElementById("scrollHint").style.display = "block";
         }
