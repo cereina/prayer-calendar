@@ -404,10 +404,10 @@
                         <button id="btnClearCalendar" type="button">Clear Calendar</button>
                     </div>
                     <div class="btnrow" style="margin-top:8px;">
-  <button id="btnEnableAlerts" type="button">Enable Adhan Alerts</button>
-  <button id="btnTestAlert" type="button">Test Alert</button>
-</div>
-                    
+                        <button id="btnEnableAlerts" type="button">Enable Adhan Alerts</button>
+                        <button id="btnTestAlert" type="button">Test Alert</button>
+                    </div>
+
                 </div>
             </div>
         </div>
@@ -454,8 +454,8 @@
             Tip: Save as <b>index.html</b>. Settings are stored locally in your browser.
         </div-->
         <audio id="adhanAudio" preload="auto">
-                        <source src="adhan.mp3" type="audio/mpeg" />
-                    </audio>
+            <source src="adhan.mp3" type="audio/mpeg" />
+        </audio>
     </div>
 
     <script>
@@ -983,127 +983,127 @@
 
 
         let alertsEnabled = false;
-let alertInterval = null;
+        let alertInterval = null;
 
-function setAlertsStatus(text) {
-  const el = document.getElementById("alertsStatus");
-  if (el) el.textContent = text;
-}
+        function setAlertsStatus(text) {
+            const el = document.getElementById("alertsStatus");
+            if (el) el.textContent = text;
+        }
 
-async function enableAlerts() {
-  // Notifications need HTTPS and permission
-  if (!("Notification" in window)) {
-    setAlertsStatus("Alerts: Not supported on this browser");
-    return;
-  }
+        async function enableAlerts() {
+            // Notifications need HTTPS and permission
+            if (!("Notification" in window)) {
+                setAlertsStatus("Alerts: Not supported on this browser");
+                return;
+            }
 
-  const perm = await Notification.requestPermission();
-  if (perm !== "granted") {
-    setAlertsStatus("Alerts: Permission denied");
-    return;
-  }
+            const perm = await Notification.requestPermission();
+            if (perm !== "granted") {
+                setAlertsStatus("Alerts: Permission denied");
+                return;
+            }
 
-  // Arm audio (user interaction happened because they clicked the button)
-  const audio = document.getElementById("adhanAudio");
-  try {
-    if (audio) {
-      audio.muted = true;
-      await audio.play();
-      audio.pause();
-      audio.currentTime = 0;
-      audio.muted = false;
-    }
-  } catch {
-    // Some browsers still block; notifications can still work
-  }
+            // Arm audio (user interaction happened because they clicked the button)
+            const audio = document.getElementById("adhanAudio");
+            try {
+                if (audio) {
+                    audio.muted = true;
+                    await audio.play();
+                    audio.pause();
+                    audio.currentTime = 0;
+                    audio.muted = false;
+                }
+            } catch {
+                // Some browsers still block; notifications can still work
+            }
 
-  alertsEnabled = true;
-  setAlertsStatus("Alerts: On (works while app is open)");
-  startAlertLoop();
-}
+            alertsEnabled = true;
+            setAlertsStatus("Alerts: On (works while app is open)");
+            startAlertLoop();
+        }
 
-function startAlertLoop() {
-  if (alertInterval) clearInterval(alertInterval);
+        function startAlertLoop() {
+            if (alertInterval) clearInterval(alertInterval);
 
-  // check frequently to hit the exact minute
-  alertInterval = setInterval(() => {
-    if (!alertsEnabled || !lastComputed) return;
+            // check frequently to hit the exact minute
+            alertInterval = setInterval(() => {
+                if (!alertsEnabled || !lastComputed) return;
 
-    // Build today's schedule again from what’s on screen (safe + simple)
-    // We’ll notify for: Fajr, Dhuhr, Asr, Maghrib, Isha (skip Sunrise/Imsak by default)
-    const notifyKeys = new Set(["fajr", "dhuhr", "asr", "maghrib", "isha"]);
+                // Build today's schedule again from what’s on screen (safe + simple)
+                // We’ll notify for: Fajr, Dhuhr, Asr, Maghrib, Isha (skip Sunrise/Imsak by default)
+                const notifyKeys = new Set(["fajr", "dhuhr", "asr", "maghrib", "isha"]);
 
-    const now = new Date();
-    const dateKey = toDateKey(now);
+                const now = new Date();
+                const dateKey = toDateKey(now);
 
-    // Find the next prayer in your already-built list by reading the DOM times
-    // (Alternatively we can rebuild from PrayTimes again; DOM reading avoids extra calc)
-    const rows = Array.from(document.querySelectorAll("#timesList .row"))
-      .map((row) => {
-        const label = row.querySelector("div div")?.textContent?.trim() || "";
-        const time = row.querySelector("div[style*='font-weight']")?.textContent?.trim() || "";
-        return { label, time };
-      });
+                // Find the next prayer in your already-built list by reading the DOM times
+                // (Alternatively we can rebuild from PrayTimes again; DOM reading avoids extra calc)
+                const rows = Array.from(document.querySelectorAll("#timesList .row"))
+                    .map((row) => {
+                        const label = row.querySelector("div div")?.textContent?.trim() || "";
+                        const time = row.querySelector("div[style*='font-weight']")?.textContent?.trim() || "";
+                        return { label, time };
+                    });
 
-    // Map label -> key (based on your labels)
-    const labelToKey = (label) => {
-      if (label.startsWith("Fajr")) return "fajr";
-      if (label === "Dhuhr") return "dhuhr";
-      if (label === "Asr") return "asr";
-      if (label.startsWith("Maghrib")) return "maghrib";
-      if (label === "Isha") return "isha";
-      return null;
-    };
+                // Map label -> key (based on your labels)
+                const labelToKey = (label) => {
+                    if (label.startsWith("Fajr")) return "fajr";
+                    if (label === "Dhuhr") return "dhuhr";
+                    if (label === "Asr") return "asr";
+                    if (label.startsWith("Maghrib")) return "maghrib";
+                    if (label === "Isha") return "isha";
+                    return null;
+                };
 
-    const nowMin = now.getHours() * 60 + now.getMinutes();
+                const nowMin = now.getHours() * 60 + now.getMinutes();
 
-    for (const r of rows) {
-      const key = labelToKey(r.label);
-      if (!key || !notifyKeys.has(key)) continue;
+                for (const r of rows) {
+                    const key = labelToKey(r.label);
+                    if (!key || !notifyKeys.has(key)) continue;
 
-      const tMin = minutesSinceMidnight(r.time);
-      if (tMin == null) continue;
+                    const tMin = minutesSinceMidnight(r.time);
+                    if (tMin == null) continue;
 
-      // fire within the first 20 seconds of that minute
-      if (tMin === nowMin && now.getSeconds() < 20) {
-        const lastKey = localStorage.getItem("last_notified") || "";
-        const thisKey = `${dateKey}_${key}_${r.time}`;
-        if (lastKey === thisKey) return; // already notified
+                    // fire within the first 20 seconds of that minute
+                    if (tMin === nowMin && now.getSeconds() < 20) {
+                        const lastKey = localStorage.getItem("last_notified") || "";
+                        const thisKey = `${dateKey}_${key}_${r.time}`;
+                        if (lastKey === thisKey) return; // already notified
 
-        localStorage.setItem("last_notified", thisKey);
-        fireNotification(r.label, r.time);
-        return;
-      }
-    }
-  }, 15000);
-}
+                        localStorage.setItem("last_notified", thisKey);
+                        fireNotification(r.label, r.time);
+                        return;
+                    }
+                }
+            }, 15000);
+        }
 
-function fireNotification(prayerName, time) {
-  try {
-    new Notification(`Adhan: ${prayerName}`, {
-      body: `Time: ${time}`,
-      silent: false
-    });
-  } catch {
-    // ignore
-  }
+        function fireNotification(prayerName, time) {
+            try {
+                new Notification(`Adhan: ${prayerName}`, {
+                    body: `Time: ${time}`,
+                    silent: false
+                });
+            } catch {
+                // ignore
+            }
 
-  // Play audio if possible
-  const audio = document.getElementById("adhanAudio");
-  if (audio) {
-    audio.currentTime = 0;
-    audio.play().catch(() => {
-      // If blocked, notification still shows
-    });
-  }
-}
+            // Play audio if possible
+            const audio = document.getElementById("adhanAudio");
+            if (audio) {
+                audio.currentTime = 0;
+                audio.play().catch(() => {
+                    // If blocked, notification still shows
+                });
+            }
+        }
 
-function testAlert() {
-  fireNotification("Test", new Date().toLocaleTimeString());
-}
+        function testAlert() {
+            fireNotification("Test", new Date().toLocaleTimeString());
+        }
 
-document.getElementById("btnEnableAlerts")?.addEventListener("click", enableAlerts);
-document.getElementById("btnTestAlert")?.addEventListener("click", testAlert);
+        document.getElementById("btnEnableAlerts")?.addEventListener("click", enableAlerts);
+        document.getElementById("btnTestAlert")?.addEventListener("click", testAlert);
 
     </script>
 </body>
