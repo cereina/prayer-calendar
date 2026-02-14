@@ -431,19 +431,19 @@
             <!-- Mobile cards -->
             <div class="mobileCards" id="ramadanCards" aria-label="Ramadan timetable cards"></div>
 
-            <div class="scrollHint" id="scrollHint">
+            <!--div class="scrollHint" id="scrollHint">
                 Tip: On larger screens, you can scroll the table horizontally.
-            </div>
+            </div-->
 
-            <div class="tiny" style="margin-top:10px;">
+            <!--div class="tiny" style="margin-top:10px;">
                 Note: Some communities apply local “iqama” offsets. You can adjust the Imsak offset, and we can add
                 per-prayer offsets too.
-            </div>
+            </div-->
         </div>
 
-        <div class="muted" style="margin-top:14px;">
+        <!--div class="muted" style="margin-top:14px;">
             Tip: Save as <b>index.html</b>. Settings are stored locally in your browser.
-        </div>
+        </div-->
     </div>
 
     <script>
@@ -873,14 +873,14 @@ function hijriLong(date) {
             // Screen reader caption + hint
             //document.getElementById("ramadanCaption").textContent =`Ramadan timetable for latitude ${lat.toFixed(4)} and longitude ${lng.toFixed(4)} (Jafari). Imsak offset ${imsakOffset} minutes.`;
 
-            document.getElementById("scrollHint").style.display = "block";
+            //document.getElementById("scrollHint").style.display = "block";
         }
 
         function clearCalendar() {
             document.getElementById("ramadanCard").style.display = "none";
             document.getElementById("ramadanTbody").innerHTML = "";
             document.getElementById("ramadanCards").innerHTML = "";
-            document.getElementById("scrollHint").style.display = "none";
+            //document.getElementById("scrollHint").style.display = "none";
         }
 
         // -----------------------
