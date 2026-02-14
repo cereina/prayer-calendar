@@ -534,33 +534,47 @@
         // -----------------------
         // Hijri helpers (using Intl islamic calendar)
         // -----------------------
-        function hijriParts(date) {
-            try {
-                const fmt = new Intl.DateTimeFormat("en-u-ca-islamic", {
-                    year: "numeric", month: "numeric", day: "numeric"
-                });
-                const parts = fmt.formatToParts(date);
-                const get = (type) => parts.find(p => p.type === type)?.value;
-                const y = Number(get("year"));
-                const m = Number(get("month"));
-                const d = Number(get("day"));
-                if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
-                return { y, m, d };
-            } catch {
-                return null;
-            }
-        }
+        const HIJRI_MONTHS_EN = [
+  "Muharram",
+  "Safar",
+  "Rabiʿ al-Awwal",
+  "Rabiʿ al-Thani",
+  "Jumada al-Awwal",
+  "Jumada al-Thani",
+  "Rajab",
+  "Shaʿban",
+  "Ramadan",
+  "Shawwal",
+  "Dhu al-Qaʿdah",
+  "Dhu al-Hijjah"
+];
 
-        function hijriLong(date) {
-            try {
-                const fmt = new Intl.DateTimeFormat("en-u-ca-islamic", {
-                    day: "numeric", month: "long", year: "numeric"
-                });
-                return fmt.format(date);
-            } catch {
-                return "";
-            }
-        }
+function hijriParts(date) {
+  try {
+    const fmt = new Intl.DateTimeFormat("en-u-ca-islamic", {
+      year: "numeric", month: "numeric", day: "numeric"
+    });
+    const parts = fmt.formatToParts(date);
+    const get = (type) => parts.find(p => p.type === type)?.value;
+
+    const y = Number(get("year"));
+    const m = Number(get("month"));
+    const d = Number(get("day"));
+
+    if (!Number.isFinite(y) || !Number.isFinite(m) || !Number.isFinite(d)) return null;
+    return { y, m, d };
+  } catch {
+    return null;
+  }
+}
+
+function hijriLong(date) {
+  const hp = hijriParts(date);
+  if (!hp) return "";
+  const monthName = HIJRI_MONTHS_EN[hp.m - 1] || `Month ${hp.m}`;
+  return `${monthName} ${hp.d}, ${hp.y} AH`;
+}
+
 
         function isRamadan(date) {
             const hp = hijriParts(date);
@@ -960,3 +974,4 @@
 </body>
 
 </html>
+
